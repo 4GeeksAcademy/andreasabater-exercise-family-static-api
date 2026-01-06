@@ -9,15 +9,11 @@ class FamilyStructure:
     def __init__(self, last_name):
         self.last_name = last_name
         self._next_id = 1
-        self._members = [
-            {
-                "id": self._generate_id(),
-                "first_name": "John",
-                "last_name": last_name,
-                "age": 33,
-                "lucky_numbers": [7, 13, 22]
-            }
-        ]
+        self._members = [ { "id": self._generate_id(),
+                            "first_name": "John",
+                            "last_name": last_name,
+                            "age": 33,
+                            "lucky_numbers": [7, 13, 22] } ]
 
     # This method generates a unique incremental ID
     def _generate_id(self):
