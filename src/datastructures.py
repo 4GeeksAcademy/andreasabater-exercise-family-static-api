@@ -4,7 +4,7 @@ class FamilyStructure:
         self._next_id = 1
         self._members = []
 
-    
+    # NO modificar
     def _generate_id(self):
         generated_id = self._next_id
         self._next_id += 1
@@ -18,7 +18,7 @@ class FamilyStructure:
         age = member.get("age")
         lucky_numbers = member.get("lucky_numbers")
 
-        if not isinstance(first_name, str) or first_name.strip() == "":
+        if not isinstance(first_name, str) or not first_name.strip():
             return None
         if not isinstance(age, int) or age <= 0:
             return None
@@ -27,7 +27,7 @@ class FamilyStructure:
 
         new_member = {
             "id": self._generate_id(),
-            "first_name": first_name,
+            "first_name": first_name.strip(),
             "last_name": self.last_name,
             "age": age,
             "lucky_numbers": lucky_numbers
@@ -49,5 +49,6 @@ class FamilyStructure:
                 return m
         return None
 
-    def get_all_members(self):
+    # compatibilidad con tests (a veces lo llaman con parámetro)
+    def get_all_members(self, id=None):
         return self._members
