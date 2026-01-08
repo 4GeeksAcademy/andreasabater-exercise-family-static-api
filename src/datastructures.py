@@ -4,7 +4,7 @@ class FamilyStructure:
         self._next_id = 1
         self._members = []
 
-    # NO modificar
+    # generar ID devuelve el ID generado
     def _generate_id(self):
         generated_id = self._next_id
         self._next_id += 1
@@ -49,6 +49,6 @@ class FamilyStructure:
                 return m
         return None
 
-    # compatibilidad con tests (a veces lo llaman con parámetro)
+    
     def get_all_members(self, id=None):
         return self._members

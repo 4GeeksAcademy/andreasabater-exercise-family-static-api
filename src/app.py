@@ -4,17 +4,15 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
 from utils import APIException, generate_sitemap
 from datastructures import FamilyStructure
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 CORS(app)
-
 jackson_family = FamilyStructure("Jackson")
 
-# ---- Miembros iniciales (solo una vez, sin duplicarse) ----
+# Usuarios
 initial_members = [
     {"first_name": "John", "age": 33, "lucky_numbers": [7, 13, 22]},
     {"first_name": "Jane", "age": 35, "lucky_numbers": [10, 14, 3]},
@@ -26,7 +24,7 @@ for m in initial_members:
     if m["first_name"] not in existing_names:
         jackson_family.add_member(m)
         existing_names.add(m["first_name"])
-# ----------------------------------------------------------
+
 
 
 @app.errorhandler(APIException)
@@ -39,14 +37,14 @@ def sitemap():
     return generate_sitemap(app)
 
 
-# 1) GET /members -> LISTA
+#  GET /members -> LISTA
 @app.route("/members", methods=["GET"])
 def get_members():
     members = jackson_family.get_all_members()
     return jsonify(members), 200
 
 
-# 2) GET /members/<id> -> OBJETO o 404
+#  GET /members/<id> -> OBJETO o 404
 @app.route("/members/<int:member_id>", methods=["GET"])
 def get_single_member(member_id):
     member = jackson_family.get_member(member_id)
@@ -55,7 +53,7 @@ def get_single_member(member_id):
     return jsonify(member), 200
 
 
-# 3) POST /members -> crea miembro
+#  POST /members -> crea miembro
 @app.route("/members", methods=["POST"])
 def create_member():
     if not request.is_json:
@@ -79,8 +77,7 @@ def create_member():
     added = jackson_family.add_member({
         "first_name": first_name.strip(),
         "age": age,
-        "lucky_numbers": lucky_numbers
-    })
+        "lucky_numbers": lucky_numbers})
 
     if added is None:
         return jsonify({"error": "Invalid member data"}), 400
@@ -88,7 +85,7 @@ def create_member():
     return jsonify(added), 200
 
 
-# 4) DELETE /members/<id> -> {"done": True} o 404
+#  DELETE /members/<id> true o 404
 @app.route("/members/<int:member_id>", methods=["DELETE"])
 def remove_member(member_id):
     deleted = jackson_family.delete_member(member_id)
